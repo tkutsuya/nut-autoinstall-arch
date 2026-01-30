@@ -1,16 +1,16 @@
 #!/bin/bash
-# Detect if the system is Manjaro Linux
+# Detect if the system is Manjaro
 if [ -f /etc/os-release ]; then
     . /etc/os-release
-    if [ "$ID" != "Manjaro" ]; then
-        echo "ERROR: This script is designed for Arch Linux. Detected: $NAME"
+    # Manjaro ID is usually 'manjaro', but we check ID_LIKE for safety
+    if [[ "$ID" != "manjaro" && "$ID_LIKE" != *"manjaro"* ]]; then
+        echo "ERROR: This script is designed for Manjaro. Detected: $NAME"
         exit 1
     fi
 else
-    echo "ERROR: Cannot detect OS. This script requires Arch Linux."
+    echo "ERROR: Cannot detect OS. This script requires Manjaro."
     exit 1
 fi
-
 # 1. Hardware Defaults
 VENDOR_ID="0665"
 PRODUCT_ID="5161"
