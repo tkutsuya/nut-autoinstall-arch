@@ -1,4 +1,15 @@
 #!/bin/bash
+# Detect if the system is Arch Linux
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    if [ "$ID" != "arch" ]; then
+        echo "ERROR: This script is designed for Arch Linux. Detected: $NAME"
+        exit 1
+    fi
+else
+    echo "ERROR: Cannot detect OS. This script requires Arch Linux."
+    exit 1
+fi
 
 # 1. Hardware Defaults (Keep for udev rules reference, but not used for config fallback)
 VENDOR_ID="0665"
