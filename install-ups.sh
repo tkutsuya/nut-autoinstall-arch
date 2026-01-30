@@ -39,7 +39,7 @@ echo "Hardware found! Applying configuration..."
 sudo tee /etc/nut/ups.conf <<EOF
 [$UPS_ID]
 $SCAN_RESULT
-    desc = "Cleanline UPS"
+    #desc = "Cleanline UPS"
     default.battery.voltage.high = 40.5
     default.battery.voltage.low = 30.0
 EOF
