@@ -1,8 +1,8 @@
 #!/bin/bash
-# Detect if the system is Arch Linux
+# Detect if the system is Manjaro Linux
 if [ -f /etc/os-release ]; then
     . /etc/os-release
-    if [ "$ID" != "arch" ]; then
+    if [ "$ID" != "Manjaro" ]; then
         echo "ERROR: This script is designed for Arch Linux. Detected: $NAME"
         exit 1
     fi
