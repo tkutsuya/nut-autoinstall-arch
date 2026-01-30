@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 1. Hardware Defaults (Fallback for Cypress 0665:5161 chip)
+# 1. Hardware Defaults (Keep for udev rules reference, but not used for config fallback)
 VENDOR_ID="0665"
 PRODUCT_ID="5161"
 
@@ -28,21 +28,17 @@ echo "--- Scanning for UPS Hardware ---"
 # -U (USB), -N (NUT format), -q (quiet)
 SCAN_RESULT=$(sudo nut-scanner -UNq 2>/dev/null | grep -v '\[')
 
-echo "--- Configuring UPS Driver (/etc/nut/ups.conf) ---"
-if [ -n "$SCAN_RESULT" ]; then
-    echo "Hardware found via nut-scanner!"
-    DRIVER_BLOCK="$SCAN_RESULT"
-else
-    echo "Scan failed. Falling back to hardcoded Cypress driver values."
-    DRIVER_BLOCK="    driver = nutdrv_qx
-    port = auto
-    vendorid = $VENDOR_ID
-    productid = $PRODUCT_ID"
+# Check if SCAN_RESULT is empty; if so, exit the script immediately
+if [ -z "$SCAN_RESULT" ]; then
+    echo "CRITICAL: No UPS hardware detected via nut-scanner. Installation aborted."
+    exit 1
 fi
 
+echo "--- Configuring UPS Driver (/etc/nut/ups.conf) ---"
+echo "Hardware found! Applying configuration..."
 sudo tee /etc/nut/ups.conf <<EOF
 [$UPS_ID]
-$DRIVER_BLOCK
+$SCAN_RESULT
     desc = "Cleanline UPS"
     default.battery.voltage.high = 40.5
     default.battery.voltage.low = 30.0
